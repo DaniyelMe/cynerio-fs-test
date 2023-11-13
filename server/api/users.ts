@@ -18,4 +18,14 @@ export default defineEventHandler(async (event) => {
       return userService.getUsers();
     }
   }
+
+  if (event.req.method === 'DELETE') {
+    const userService = getUserService();
+
+    const params = event.context.params;
+
+    // Access specific parameter, for example, the "id" parameter in the route "/api/users/:id"
+    const userId = params?.id;
+    if (userId) return userService.removeUserById(Number(userId));
+  }
 });

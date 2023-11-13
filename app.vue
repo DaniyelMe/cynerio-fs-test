@@ -84,9 +84,6 @@ function handelConfirm() {
 
     if (userNameError.value || userAddressError.value) return;
 
-    console.log('userNameError.value:', userNameError.value);
-    console.log('userAddressError.value:', userAddressError.value);
-
     userStore.addUser({
       name: newUserName.value,
       address: newUserAddress.value,
@@ -94,13 +91,12 @@ function handelConfirm() {
 
     handelCencel();
   } else {
-    // action to delete user
-    console.log('action to delete user');
+    if (userToDelete.value) userStore.deleteUser(userToDelete.value.id);
     handelCencel();
   }
 }
 
-async function updateSearchTerm($event: Event) {
+async function updateSearchTerm($event: any) {
   searchTerm.value = $event?.target?.value;
   if (searchTerm.value.length > 0)
     rowsFilteredData.value = await userStore.searchTerm(searchTerm.value);

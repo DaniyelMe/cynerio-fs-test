@@ -24,6 +24,8 @@ defineProps<{
 
 <style lang="less" scoped>
 .basic-table {
+  width: 100%;
+
   th {
     border-bottom: 1px solid var(--secondary-bg-color);
     text-transform: capitalize;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isActionable">
+    <div v-if="isActionable" class="table-actionable">
       <input
         type="text"
         :value="searchTerm"
@@ -35,7 +35,7 @@
 import CheckboxInput from './base/CheckboxInput.vue';
 import Table from './base/Table.vue';
 
-type RowData = Record<string, string>;
+type RowData = Record<string, string | number>;
 
 const props = defineProps<{
   rowsData: RowData[];
@@ -44,8 +44,8 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(['openModal', 'update:searchTerm']);
 
-const checkboxList = ref(['date', 'name', 'address']);
-const checkedColumns = ref(['date', 'name', 'address']);
+const checkboxList = ref(['id', 'date', 'name', 'address']);
+const checkedColumns = ref(['id', 'date', 'name', 'address']);
 
 const filteredTableData = computed(() => {
   const orderedColumns = checkboxList.value.filter(
@@ -76,16 +76,16 @@ const filteredTableData = computed(() => {
   padding: 0;
   margin: 0;
   cursor: pointer;
-  /* padding-block: 0;
-  border-width: 1px;
-  border-color: transparent;
-  padding-inline: 0px;
-  border-radius: 5px;
-  background-color: transparent; */
 }
 
 .trash-icon {
   width: 26px;
   display: block;
+}
+
+.table-actionable {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
 }
 </style>

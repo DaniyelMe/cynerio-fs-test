@@ -47,16 +47,19 @@ function initDBWithUsers(
   );
   const users: User[] = [
     {
+      id: 1,
       name: 'Alice',
       address: '123 Maple Street',
       date: new Date().toLocaleString(),
     },
     {
+      id: 2,
       name: 'Bob',
       address: '456 Oak Avenue',
       date: new Date().toLocaleString(),
     },
     {
+      id: 3,
       name: 'Charlie',
       address: '789 Pine Lane',
       date: new Date().toLocaleString(),

@@ -29,10 +29,22 @@ export const useUserStore = defineStore({
           `/api/users?search=${encodeURIComponent(searchTerm)}`
         ).then((res) => res.json());
 
-        console.log('newUser:', filteredUsers);
         return filteredUsers;
       } catch (error) {
         console.error('Error fetching users:', error);
+      }
+    },
+    async deleteUser(userId: number) {
+      try {
+        const response = await fetch(`/api/users/${userId}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          this.users = this.users.filter((user: User) => user.id !== userId);
+        }
+      } catch (error) {
+        console.error('Error deleting user:', error);
       }
     },
   },

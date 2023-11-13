@@ -1,10 +1,14 @@
 type User = {
+  id: number;
   date: string;
   name: string;
   address: string;
 };
 
-type NewUser = Omit<User, 'date'>;
+type NewUser = {
+  name: string;
+  address: string;
+};
 
 type Modal = {
   isShowModal: boolean;
