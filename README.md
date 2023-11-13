@@ -1,7 +1,6 @@
 # Todos
 
 - add tests
-- add design
 - add debounce
 
 # Nuxt 3 Minimal Starter
