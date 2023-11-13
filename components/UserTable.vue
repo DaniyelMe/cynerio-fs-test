@@ -7,7 +7,9 @@
         @keyup="emit('update:searchTerm', $event)"
         placeholder="Search"
       />
-      <button @click="emit('openModal', 'Add User')">Add User</button>
+      <Button @click="emit('openModal', 'Add User')" class="button" primary>
+        Add User
+      </Button>
     </div>
 
     <div class="user-table-checkbox-list">
@@ -20,18 +22,19 @@
 
     <Table :columns="filteredTableData.columns" :rows="filteredTableData.rows">
       <template v-slot:actions="slotProps">
-        <button
+        <Button
           class="icon-button"
           @click="emit('openModal', 'Delete User', slotProps)"
         >
           <img src="../assets/trash.svg" alt="" class="trash-icon" />
-        </button>
+        </Button>
       </template>
     </Table>
   </div>
 </template>
 
 <script setup lang="ts">
+import Button from './base/Button.vue';
 import CheckboxInput from './base/CheckboxInput.vue';
 import Table from './base/Table.vue';
 
@@ -66,16 +69,23 @@ const filteredTableData = computed(() => {
 });
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .user-table-checkbox-list {
   display: flex;
   margin: 20px 0;
 }
 
 .icon-button {
+  background-color: transparent;
   padding: 0;
   margin: 0;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  &:hover {
+    background-color: var(--gray-hover);
+    transition: background-color 0.3s;
+  }
 }
 
 .trash-icon {
@@ -86,6 +96,7 @@ const filteredTableData = computed(() => {
 .table-actionable {
   display: flex;
   justify-content: flex-end;
-  gap: 4px;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 </style>

@@ -18,9 +18,9 @@
       @confirm="handelConfirm"
     >
       <div v-if="isAddUser" class="add-user-inputs">
-        <BaseInput v-model="newUserName" label="Name" :error="userNameError" />
-        <BaseInput
-          v-model="newUserAddress"
+        <Input v-model.trim="newUserName" label="Name" :error="userNameError" />
+        <Input
+          v-model.trim="newUserAddress"
           label="Address"
           :error="userAddressError"
         />
@@ -38,7 +38,7 @@ import {
 } from '~/composables/regexValidations';
 
 import UserTable from '~/components/UserTable.vue';
-import BaseInput from '~/components/base/Input.vue';
+import Input from '~/components/base/Input.vue';
 import Modal from '~/components/base/Modal.vue';
 
 const userStore = useUserStore();
@@ -59,15 +59,16 @@ const isAddUser = computed(() =>
 );
 
 const userToDelete = ref();
-const newUserName = ref();
+const newUserName = ref('');
+const newUserAddress = ref('');
+
 const userNameError = ref();
-const newUserAddress = ref();
 const userAddressError = ref();
 
 function handelCencel() {
   userToDelete.value = null;
-  newUserName.value = null;
-  newUserAddress.value = null;
+  newUserName.value = '';
+  newUserAddress.value = '';
   uiStore.resetModal();
 }
 
@@ -125,11 +126,13 @@ onMounted(async () => {
 :root {
   --secondary-bg-color: #ededed;
   --error-color: #e3342f;
+  --primary-color: #007bff;
+  --primary-color-hover: #0056b3;
   --overlay-color: rgba(0, 0, 0, 0.5);
+  --gray-hover: #e1e1e1;
 }
 
 /* Reset */
-
 * {
   box-sizing: border-box;
 }
@@ -141,8 +144,24 @@ table {
 
 /* app.vue style */
 .add-user-inputs {
+  display: flex;
+  flex-direction: column;
+
   input {
     margin: 8px 0;
+  }
+}
+
+.icon-button {
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--gray-hover);
+    transition: background-color 0.3s;
   }
 }
 </style>

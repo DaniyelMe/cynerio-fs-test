@@ -1,6 +1,6 @@
 <template>
   <label :for="label">{{ label }}</label>
-  <input v-model="value" :id="label" :class="{ 'is-error': error }" />
+  <input v-model.trim="value" :id="label" :class="{ 'is-error': error }" />
 
   <span v-if="error" class="error-message">{{ error }}</span>
 </template>
@@ -21,12 +21,15 @@ const value = computed({
 
 <style lang="less" scoped>
 input {
-  width: 100%;
   padding: 8px;
-  line-height: 1.5;
   border: 1px solid #ccc;
   border-radius: 4px;
-  transition: border-color 0.2s;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+  }
 
   .is-error {
     border-color: var(--error-color);
