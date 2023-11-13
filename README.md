@@ -1,6 +1,5 @@
 # Todos
 
-- fix id column problem
 - add tests
 - add design
 - add debounce

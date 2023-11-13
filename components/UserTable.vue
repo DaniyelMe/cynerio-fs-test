@@ -44,19 +44,18 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(['openModal', 'update:searchTerm']);
 
-const checkboxList = ref(['id', 'date', 'name', 'address']);
-const checkedColumns = ref(['id', 'date', 'name', 'address']);
+const checkboxList = ref(['date', 'name', 'address']);
+const checkedColumns = ref(['date', 'name', 'address']);
 
 const filteredTableData = computed(() => {
   const orderedColumns = checkboxList.value.filter(
-    (col) =>
-      checkedColumns.value.includes(col) || col === 'actions' || col === 'id'
+    (col) => checkedColumns.value.includes(col) || col === 'actions'
   );
 
   if (props.isActionable) orderedColumns.push('actions');
 
   const rows = props.rowsData?.map((row: RowData) => {
-    const newRow: RowData = {};
+    const newRow: RowData = { id: row.id };
     orderedColumns.forEach((col: string) => {
       newRow[col] = row[col];
     });
