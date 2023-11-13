@@ -2,8 +2,9 @@ import { defineStore } from 'pinia';
 
 export const useUserStore = defineStore({
   id: 'users',
-  state: (): { users: User[] } => ({
+  state: (): { users: User[]; currentSearched: User[] } => ({
     users: [],
+    currentSearched: [],
   }),
   getters: {
     getUsers: (store) => {
@@ -12,24 +13,27 @@ export const useUserStore = defineStore({
   },
   actions: {
     async fetchUsers() {
-      this.users = await fetch('/api/users').then((res) => res.json());
+      const userRes = await fetch('/api/users');
+      this.users = await userRes.json();
     },
     async addUser({ name, address }: NewUser) {
-      const newUser = await fetch('/api/users', {
+      const newUserRes = await fetch('/api/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, address }),
-      }).then((res) => res.json());
+      });
 
+      const newUser = await newUserRes.json();
       this.users.push(newUser);
     },
     async searchTerm(searchTerm: string) {
       try {
-        const filteredUsers = await fetch(
+        const filteredUsersRes = await fetch(
           `/api/users?search=${encodeURIComponent(searchTerm)}`
-        ).then((res) => res.json());
+        );
+        const filteredUsers = await filteredUsersRes.json();
 
-        return filteredUsers;
+        this.currentSearched = filteredUsers;
       } catch (error) {
         console.error('Error fetching users:', error);
       }

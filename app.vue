@@ -45,11 +45,13 @@ const userStore = useUserStore();
 const uiStore = useUIStore();
 
 const rowsData = computed(() => userStore.getUsers);
-const rowsFilteredData = ref([]);
+
 const searchTerm = ref('');
 
 const filteredRowsData = computed(() => {
-  return searchTerm.value.length > 0 ? rowsFilteredData.value : rowsData.value;
+  return searchTerm.value.length > 0
+    ? userStore.currentSearched
+    : rowsData.value;
 });
 const modalConfig = computed(() => uiStore.modal);
 const isAddUser = computed(() =>
@@ -98,8 +100,7 @@ function handelConfirm() {
 
 async function updateSearchTerm($event: any) {
   searchTerm.value = $event?.target?.value;
-  if (searchTerm.value.length > 0)
-    rowsFilteredData.value = await userStore.searchTerm(searchTerm.value);
+  if (searchTerm.value.length > 0) userStore.searchTerm(searchTerm.value);
 }
 
 function handelShowModal(

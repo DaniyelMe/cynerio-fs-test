@@ -1,7 +1,9 @@
 # Todos
+
 - fix id column problem
 - add tests
 - add design
+- add debounce
 
 # Nuxt 3 Minimal Starter
 
@@ -78,6 +80,3 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-
-
-
