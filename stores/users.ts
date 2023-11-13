@@ -11,28 +11,29 @@ export const useUserStore = defineStore({
     },
   },
   actions: {
-    addUser({ name, address }: NewUser) {
-      console.log('name, address:', name, address)
-      // this.users.push(user);
-    },
     async fetchUsers() {
-      this.users = await Promise.resolve([
-        {
-          date: new Date().toLocaleString(),
-          name: 'Alice',
-          address: '123 Maple Street',
-        },
-        {
-          date: new Date().toLocaleString(),
-          name: 'Bob',
-          address: '456 Oak Avenue',
-        },
-        {
-          date: new Date().toLocaleString(),
-          name: 'Charlie',
-          address: '789 Pine Lane',
-        },
-      ]);
+      this.users = await fetch('/api/users').then((res) => res.json());
+    },
+    async addUser({ name, address }: NewUser) {
+      const newUser = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, address }),
+      }).then((res) => res.json());
+
+      this.users.push(newUser);
+    },
+    async searchTerm(searchTerm: string) {
+      try {
+        const filteredUsers = await fetch(
+          `/api/users?search=${encodeURIComponent(searchTerm)}`
+        ).then((res) => res.json());
+
+        console.log('newUser:', filteredUsers);
+        return filteredUsers;
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
     },
   },
 });

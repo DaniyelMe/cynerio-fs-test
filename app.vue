@@ -1,9 +1,10 @@
 <template>
   <div>
     <UserTable
-      :rowsData="rowsData"
+      :rowsData="filteredRowsData"
+      :searchTerm="searchTerm"
+      @update:searchTerm="updateSearchTerm"
       :isActionable="true"
-      :isSearch="true"
       @openModal="handelShowModal"
     />
 
@@ -44,6 +45,12 @@ const userStore = useUserStore();
 const uiStore = useUIStore();
 
 const rowsData = computed(() => userStore.getUsers);
+const rowsFilteredData = ref([]);
+const searchTerm = ref('');
+
+const filteredRowsData = computed(() => {
+  return searchTerm.value.length > 0 ? rowsFilteredData.value : rowsData.value;
+});
 const modalConfig = computed(() => uiStore.modal);
 const isAddUser = computed(() =>
   modalConfig.value.header === 'Add User' ? true : false
@@ -51,19 +58,9 @@ const isAddUser = computed(() =>
 
 const userToDelete = ref();
 const newUserName = ref();
-const userNameError = computed(() => {
-  if (!validateAlphaLengthName(newUserName.value))
-    return `Name length should be between 3 and 32 and should not contain numbers or special characters`;
-
-  return '';
-});
+const userNameError = ref();
 const newUserAddress = ref();
-const userAddressError = computed(() => {
-  if (!validateAlphaNumericAddress(newUserAddress.value))
-    return `Address length should be between 3 and 100 and should not contain special characters`;
-
-  return '';
-});
+const userAddressError = ref();
 
 function handelCencel() {
   userToDelete.value = null;
@@ -73,18 +70,40 @@ function handelCencel() {
 }
 
 function handelConfirm() {
-  if (isAddUser) {
-    // action to add user
+  if (isAddUser.value) {
+    if (!validateAlphaLengthName(newUserName.value)) {
+      userNameError.value = `Name length should be between 3 and 32 and should not contain numbers or special characters`;
+    } else {
+      userNameError.value = null;
+    }
+    if (!validateAlphaNumericAddress(newUserAddress.value)) {
+      userAddressError.value = `Address length should be between 3 and 100 and should not contain special characters`;
+    } else {
+      userAddressError.value = null;
+    }
+
+    if (userNameError.value || userAddressError.value) return;
+
+    console.log('userNameError.value:', userNameError.value);
+    console.log('userAddressError.value:', userAddressError.value);
+
     userStore.addUser({
       name: newUserName.value,
       address: newUserAddress.value,
     });
+
+    handelCencel();
   } else {
     // action to delete user
     console.log('action to delete user');
+    handelCencel();
   }
+}
 
-  handelCencel();
+async function updateSearchTerm($event: Event) {
+  searchTerm.value = $event?.target?.value;
+  if (searchTerm.value.length > 0)
+    rowsFilteredData.value = await userStore.searchTerm(searchTerm.value);
 }
 
 function handelShowModal(
@@ -96,7 +115,6 @@ function handelShowModal(
     : bodyData?.rowData;
 
   userToDelete.value = bodyData?.rowData;
-  console.log('body:', body);
 
   uiStore.setModal({ isShowModal: true, header, body });
 }

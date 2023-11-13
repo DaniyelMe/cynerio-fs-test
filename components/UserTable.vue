@@ -1,7 +1,12 @@
 <template>
   <div>
     <div v-if="isActionable">
-      <input type="text" v-model="searchTerm" placeholder="Search" />
+      <input
+        type="text"
+        :value="searchTerm"
+        @keyup="emit('update:searchTerm', $event)"
+        placeholder="Search"
+      />
       <button @click="emit('openModal', 'Add User')">Add User</button>
     </div>
 
@@ -35,11 +40,10 @@ type RowData = Record<string, string>;
 const props = defineProps<{
   rowsData: RowData[];
   isActionable?: boolean;
-  isSearch?: boolean;
+  searchTerm?: string;
 }>();
-const emit = defineEmits(['openModal']);
+const emit = defineEmits(['openModal', 'update:searchTerm']);
 
-const searchTerm = ref();
 const checkboxList = ref(['date', 'name', 'address']);
 const checkedColumns = ref(['date', 'name', 'address']);
 
@@ -50,7 +54,7 @@ const filteredTableData = computed(() => {
 
   if (props.isActionable) orderedColumns.push('actions');
 
-  const rows = props.rowsData.map((row: RowData) => {
+  const rows = props.rowsData?.map((row: RowData) => {
     const newRow: RowData = {};
     orderedColumns.forEach((col: string) => {
       newRow[col] = row[col];
