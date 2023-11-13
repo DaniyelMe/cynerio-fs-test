@@ -44,8 +44,8 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(['openModal', 'update:searchTerm']);
 
-const checkboxList = ref(['date', 'name', 'address']);
-const checkedColumns = ref(['date', 'name', 'address']);
+const checkboxList = ref(['id', 'date', 'name', 'address']);
+const checkedColumns = ref(['id', 'date', 'name', 'address']);
 
 const filteredTableData = computed(() => {
   const orderedColumns = checkboxList.value.filter(
