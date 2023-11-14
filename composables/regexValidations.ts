@@ -9,6 +9,6 @@ export function validateAlphaNumericAddress(address: string): boolean {
 }
 
 export function validateAlphaNumeric(string: string): boolean {
-  const regex = /^[A-Za-z0-9 .]{1,100}$/;
+  const regex = /^[A-Za-z0-9]{1,100}$/;
   return !!string && regex.test(string);
 }
